@@ -61,7 +61,7 @@ func (gn *genesisNode) writeToFile() bool {
 		return false
 	}
 
-	_, err = file.Write(append(jsonData))
+	_, err = file.Write(jsonData)
 	if err != nil {
 		fmt.Println("Ошибка записи в файл:", err)
 		return false
