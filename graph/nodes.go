@@ -16,22 +16,24 @@ type Node struct {
 
 	Timestamp int64
 }
+
+/*
 type GenesisNode struct {
 	Data string
 
 	HashOwn string
 
 	Timestamp int64
-}
+}*/
 
 // генерация последующих событий
-func SubGenesisNodeGen(gn *GenesisNode) *Node {
+func SubGenesisNodeGen(genesisNode *Node) *Node {
 	var firstNode Node
 
 	firstNode.Timestamp = time.Now().UnixMicro()
 	firstNode.Data = time.Now().Format("02.01.2006 15:04:05")
-	firstNode.HashSelfParent = gn.HashOwn
-	firstNode.HashOtherParent = gn.HashOwn
+	firstNode.HashSelfParent = genesisNode.HashOwn
+	firstNode.HashOtherParent = genesisNode.HashOwn
 
 	firstNode.HashOwn = getSHA256Hash(firstNode.Data + strconv.FormatInt(gn.Timestamp, 10) + firstNode.HashSelfParent + firstNode.HashOtherParent)
 
@@ -39,12 +41,14 @@ func SubGenesisNodeGen(gn *GenesisNode) *Node {
 }
 
 // генерация событий
+// add hashOtherParent
 func NodeGenerate(prevNode *Node) *Node {
 	var newNode Node
 
 	newNode.Timestamp = time.Now().UnixMicro()
 	newNode.Data = time.Now().Format("02.01.2006 15:04:05")
 	newNode.HashSelfParent = prevNode.HashOwn
+	//here
 	newNode.HashOtherParent = prevNode.HashOwn
 
 	newNode.HashOwn = getSHA256Hash(newNode.Data + strconv.FormatInt(prevNode.Timestamp, 10) + newNode.HashSelfParent + newNode.HashOtherParent)
@@ -52,8 +56,12 @@ func NodeGenerate(prevNode *Node) *Node {
 	return &newNode
 }
 
+// func syncWriteToFiles() error {
+// 	return err
+// }
+
 // искуственная генерация событий
-func ArtifNodeGenerate(gn *GenesisNode) error {
+func ArtifNodeGenerate(genesisNode *GenesisNode) error {
 	firstNode := SubGenesisNodeGen(gn)
 	files.WriteToFile(&firstNode)
 
@@ -75,11 +83,14 @@ func ArtifNodeGenerate(gn *GenesisNode) error {
 }
 
 // генерация генезис события
-func (gn *GenesisNode) GenesisGenerate() bool {
-	gn.Data = time.Now().Format("02.01.2006 15:04:05")
-	gn.Timestamp = time.Now().UnixMicro()
+/*
+func (n *Node) GenesisGenerate() bool {
+	n.Data = "Hello Graph"
+	n.Timestamp = time.Now().UnixMicro()
 
-	gn.HashOwn = getSHA256Hash(gn.Data + strconv.FormatInt(gn.Timestamp, 10))
+	n.HashSelfParent = getSHA256Hash(n.Data + strconv.FormatInt(n.Timestamp, 10))
+	n.HashOtherParent = n.HashSelfParent
 
-	return files.WriteToFile(gn)
+	return files.WriteToFile(n)
 }
+*/

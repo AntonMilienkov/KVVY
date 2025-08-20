@@ -8,7 +8,8 @@ import (
 
 // TODO  проверка поступаемых данных
 func WriteToFile(gn interface{}) bool {
-	file, err := os.OpenFile("hashgraph.json", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	filename := "graph/hashgraph.json"
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 
 	if err != nil {
 		fmt.Println("Error while opening file")
@@ -16,7 +17,7 @@ func WriteToFile(gn interface{}) bool {
 	}
 	defer file.Close()
 
-	fileInfo, err := os.Stat("hashgraph.json")
+	fileInfo, err := os.Stat(filename)
 	if err != nil {
 		return false
 	}
@@ -26,7 +27,7 @@ func WriteToFile(gn interface{}) bool {
 	if fileInfo.Size() == 0 {
 		file.WriteString("[")
 	} else {
-		err = os.Truncate("hashgraph.json", size-1)
+		err = os.Truncate(filename, size-1)
 		if err != nil {
 			fmt.Println("ошибка при усечении файла: %w", err)
 		}
