@@ -7,19 +7,19 @@ import (
 )
 
 // TODO  проверка поступаемых данных
-func WriteToFile(gn interface{}) bool {
+func WriteToFile(gn interface{}) error {
 	filename := "graph/hashgraph.json"
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 
 	if err != nil {
 		fmt.Println("Error while opening file")
-		return false
+		return err
 	}
 	defer file.Close()
 
 	fileInfo, err := os.Stat(filename)
 	if err != nil {
-		return false
+		return err
 	}
 
 	size := fileInfo.Size()
@@ -38,16 +38,16 @@ func WriteToFile(gn interface{}) bool {
 	jsonData, err := json.Marshal(&gn)
 	if err != nil {
 		fmt.Println("Ошибка сериализации в JSON:", err)
-		return false
+		return err
 	}
 
 	_, err = file.Write(jsonData)
 	if err != nil {
 		fmt.Println("Ошибка записи в файл:", err)
-		return false
+		return err
 	}
 
 	file.WriteString("]")
 
-	return true
+	return err
 }

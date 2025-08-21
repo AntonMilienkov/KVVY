@@ -41,39 +41,16 @@ func serverRole() {
 	}
 }
 
-func clientRole() {
-	// to where?
-	client, err := rpc.Dial("tcp", "")
-
-	if err != nil {
-		log.Fatal("Не удалось подключиться к серверу:", err)
-	}
-	defer client.Close()
-
-	var gn graph.GenesisNode
-
-	fmt.Println(gn.GenesisGenerate())
-	fmt.Println(gn.HashOwn)
-	fmt.Println(gn.Timestamp)
-
-	//var n1 node
-	// fmt.Println(graph.ArtifNodeGenerate(&gn))
-	//fmt.Println(gn.HashOwn)
-	//fmt.Println(gn.Timestamp)
-}
-
 func main() {
-	//go serverRole()
+	go serverRole()
 
 	//time.Sleep(8 * time.Second)
 
 	//clientRole()
 
-	var gn graph.GenesisNode
-	fmt.Println(gn.GenesisGenerate())
-	fmt.Println(gn.HashOwn)
-	fmt.Println(gn.Timestamp)
+	genesisNode := graph.GetGenesis()
 
+	graph.ArtifNodeGenerate(genesisNode)
 }
 
 func generateDataBlocks() {
