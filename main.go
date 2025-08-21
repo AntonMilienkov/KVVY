@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/rpc"
 	"os"
+	"time"
 )
 
 type QuotientServer struct {
@@ -44,7 +45,9 @@ func serverRole() {
 func main() {
 	// go serverRole()
 
-	// //time.Sleep(8 * time.Second)
+
+	time.Sleep(8 * time.Second)
+
 
 	// //clientRole()
 

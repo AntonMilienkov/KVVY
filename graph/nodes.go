@@ -87,6 +87,16 @@ func getSelfNumber() int {
 	return 0
 }
 
+func getRandomNodeNumber(selfNumber int, n int) (randomNodeNumber int) {
+	randomNodeNumber = selfNumber
+
+	for randomNodeNumber == selfNumber {
+		randomNodeNumber = rand.Intn(n)
+	}
+
+	return
+}
+
 func sendNode(node *Node) error {
 	// ВЫБОР КОМУ ОТПРАВИТЬ
 
@@ -97,7 +107,11 @@ func sendNode(node *Node) error {
 	// заполнить массив
 	fillHosts(hosts)
 
-	// selfNumber := getSelfNumber()
+	selfNumber := getSelfNumber()
+
+	randomNodeNumber := getRandomNodeNumber(selfNumber, n)
+
+	fmt.Println(randomNodeNumber)
 
 	// УСТАНОВКА СОЕДИНЕНИЯ (ЗАПУСК КЛИЕНТА)
 
@@ -136,22 +150,21 @@ func ArtifNodeGenerate(genesisNode *Node) error {
 	firstNode := NodeGenerate(genesisNode, "")
 
 	syncWriteToFiles(firstNode)
+	/*
+		coef := 1
+		end := time.Now().Add(time.Duration(coef) * time.Minute)
 
-	rand.Seed(time.Now().UnixNano())
-	coef := 1
-	end := time.Now().Add(time.Duration(coef) * time.Minute)
+		nextNode := firstNode
+		for time.Now().Before(end) {
+			secToSleep := coef*5 + rand.Intn(20)
+			time.Sleep(time.Duration(secToSleep) * time.Second)
 
-	nextNode := firstNode
-	for time.Now().Before(end) {
-		secToSleep := coef*5 + rand.Intn(20)
-		time.Sleep(time.Duration(secToSleep) * time.Second)
+			otherParentNode := getOtherParentNode()
+			nextNode = NodeGenerate(nextNode, otherParentNode.HashOwn)
 
-		otherParentNode := getOtherParentNode()
-		nextNode = NodeGenerate(nextNode, otherParentNode.HashOwn)
-
-		files.WriteToFile(&nextNode)
-	}
-
+			files.WriteToFile(&nextNode)
+		}
+	*/
 	return nil
 }
 
