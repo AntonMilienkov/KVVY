@@ -16,7 +16,7 @@ type server struct {
 	pb.GraphServiceServer
 }
 
-func (s *server) SendNode(ctx context.Context, in *pb.NodeRequest) (*pb.NodeResponse, error) {
+func (s *server) WriteDataToAnotherNode(ctx context.Context, in *pb.NodeRequest) (*pb.NodeResponse, error) {
 	var node graph.Node
 
 	node.Data = in.GetData()

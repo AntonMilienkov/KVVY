@@ -21,10 +21,10 @@ func client(data, hashSelf, hashOther, hashOwn string, ts int64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	r, err := c.SendNode(ctx, &pb.NodeRequest{Data: data, HashSelfParent: hashSelf, HashOtherParent: hashOther, HashOwn: hashOwn, Timestamp: ts})
+	r, err := c.WriteDataToAnotherNode(ctx, &pb.NodeRequest{Data: data, HashSelfParent: hashSelf, HashOtherParent: hashOther, HashOwn: hashOwn, Timestamp: ts})
 	if err != nil {
-		log.Fatalf("error calling function SendNode: %v", err)
+		log.Fatalf("error calling function WriteDataToAnotherNode: %v", err)
 	}
 
-	log.Printf("Response from gRPC server's SendNode function: %s", r.GetMessage())
+	log.Printf("Response from gRPC server's WriteDataToAnotherNode function: %s", r.GetMessage())
 }

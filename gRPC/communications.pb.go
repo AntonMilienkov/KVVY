@@ -153,9 +153,9 @@ const file_communications_proto_rawDesc = "" +
 	"\aHashOwn\x18\x04 \x01(\tR\aHashOwn\x12\x1c\n" +
 	"\tTimestamp\x18\x05 \x01(\x03R\tTimestamp\"(\n" +
 	"\fNodeResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2C\n" +
-	"\fGraphService\x123\n" +
-	"\bSendNode\x12\x11.gRPC.NodeRequest\x1a\x12.gRPC.NodeResponse\"\x00B\aZ\x05/gRPCb\x06proto3"
+	"\amessage\x18\x01 \x01(\tR\amessage2Q\n" +
+	"\fGraphService\x12A\n" +
+	"\x16WriteDataToAnotherNode\x12\x11.gRPC.NodeRequest\x1a\x12.gRPC.NodeResponse\"\x00B\aZ\x05/gRPCb\x06proto3"
 
 var (
 	file_communications_proto_rawDescOnce sync.Once
@@ -175,8 +175,8 @@ var file_communications_proto_goTypes = []any{
 	(*NodeResponse)(nil), // 1: gRPC.NodeResponse
 }
 var file_communications_proto_depIdxs = []int32{
-	0, // 0: gRPC.GraphService.SendNode:input_type -> gRPC.NodeRequest
-	1, // 1: gRPC.GraphService.SendNode:output_type -> gRPC.NodeResponse
+	0, // 0: gRPC.GraphService.WriteDataToAnotherNode:input_type -> gRPC.NodeRequest
+	1, // 1: gRPC.GraphService.WriteDataToAnotherNode:output_type -> gRPC.NodeResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

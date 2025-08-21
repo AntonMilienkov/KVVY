@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GraphService_SendNode_FullMethodName = "/gRPC.GraphService/SendNode"
+	GraphService_WriteDataToAnotherNode_FullMethodName = "/gRPC.GraphService/WriteDataToAnotherNode"
 )
 
 // GraphServiceClient is the client API for GraphService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GraphServiceClient interface {
-	SendNode(ctx context.Context, in *NodeRequest, opts ...grpc.CallOption) (*NodeResponse, error)
+	WriteDataToAnotherNode(ctx context.Context, in *NodeRequest, opts ...grpc.CallOption) (*NodeResponse, error)
 }
 
 type graphServiceClient struct {
@@ -37,10 +37,10 @@ func NewGraphServiceClient(cc grpc.ClientConnInterface) GraphServiceClient {
 	return &graphServiceClient{cc}
 }
 
-func (c *graphServiceClient) SendNode(ctx context.Context, in *NodeRequest, opts ...grpc.CallOption) (*NodeResponse, error) {
+func (c *graphServiceClient) WriteDataToAnotherNode(ctx context.Context, in *NodeRequest, opts ...grpc.CallOption) (*NodeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(NodeResponse)
-	err := c.cc.Invoke(ctx, GraphService_SendNode_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, GraphService_WriteDataToAnotherNode_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *graphServiceClient) SendNode(ctx context.Context, in *NodeRequest, opts
 // All implementations must embed UnimplementedGraphServiceServer
 // for forward compatibility.
 type GraphServiceServer interface {
-	SendNode(context.Context, *NodeRequest) (*NodeResponse, error)
+	WriteDataToAnotherNode(context.Context, *NodeRequest) (*NodeResponse, error)
 	mustEmbedUnimplementedGraphServiceServer()
 }
 
@@ -62,8 +62,8 @@ type GraphServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedGraphServiceServer struct{}
 
-func (UnimplementedGraphServiceServer) SendNode(context.Context, *NodeRequest) (*NodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendNode not implemented")
+func (UnimplementedGraphServiceServer) WriteDataToAnotherNode(context.Context, *NodeRequest) (*NodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WriteDataToAnotherNode not implemented")
 }
 func (UnimplementedGraphServiceServer) mustEmbedUnimplementedGraphServiceServer() {}
 func (UnimplementedGraphServiceServer) testEmbeddedByValue()                      {}
@@ -86,20 +86,20 @@ func RegisterGraphServiceServer(s grpc.ServiceRegistrar, srv GraphServiceServer)
 	s.RegisterService(&GraphService_ServiceDesc, srv)
 }
 
-func _GraphService_SendNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _GraphService_WriteDataToAnotherNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GraphServiceServer).SendNode(ctx, in)
+		return srv.(GraphServiceServer).WriteDataToAnotherNode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GraphService_SendNode_FullMethodName,
+		FullMethod: GraphService_WriteDataToAnotherNode_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GraphServiceServer).SendNode(ctx, req.(*NodeRequest))
+		return srv.(GraphServiceServer).WriteDataToAnotherNode(ctx, req.(*NodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -112,8 +112,8 @@ var GraphService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GraphServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendNode",
-			Handler:    _GraphService_SendNode_Handler,
+			MethodName: "WriteDataToAnotherNode",
+			Handler:    _GraphService_WriteDataToAnotherNode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

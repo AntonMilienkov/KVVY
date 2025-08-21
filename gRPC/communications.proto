@@ -5,7 +5,7 @@ option go_package = "/gRPC";
 package gRPC;
 
 service GraphService {
-  rpc SendNode(NodeRequest) returns (NodeResponse) {}
+  rpc WriteDataToAnotherNode(NodeRequest) returns (NodeResponse) {}
 }
 
 message NodeRequest {
