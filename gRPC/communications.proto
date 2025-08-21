@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "/gRPC";
+
+package gRPC;
+
+service GraphService {
+  rpc WriteDataToAnotherNode(NodeRequest) returns (NodeResponse) {}
+}
+
+message NodeRequest {
+    string Data = 1;
+    string HashSelfParent = 2; 
+    string HashOtherParent = 3; 
+    string HashOwn = 4;
+    int64 Timestamp = 5;
+}
+
+message NodeResponse {
+  string message = 1;
+}

@@ -43,15 +43,21 @@ func serverRole() {
 }
 
 func main() {
-	go serverRole()
+	// go serverRole()
+
 
 	time.Sleep(8 * time.Second)
 
-	//clientRole()
 
-	genesisNode := graph.GetGenesis()
+	// //clientRole()
 
-	graph.ArtifNodeGenerate(genesisNode)
+	// genesisNode := graph.GetGenesis()
+
+	// graph.ArtifNodeGenerate(genesisNode)
+
+	go serverStart()
+
+	client("DATA", "HASHSELF", "HASHOTHER", "HASHOWN", 123)
 }
 
 func generateDataBlocks() {
