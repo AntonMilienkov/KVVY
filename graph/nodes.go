@@ -97,7 +97,7 @@ func sendNode(node *Node) error {
 	// заполнить массив
 	fillHosts(hosts)
 
-	selfNumber = getSelfNumber()
+	// selfNumber := getSelfNumber()
 
 	// УСТАНОВКА СОЕДИНЕНИЯ (ЗАПУСК КЛИЕНТА)
 
