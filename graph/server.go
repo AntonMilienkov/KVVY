@@ -1,13 +1,14 @@
-package main
+package graph
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
+	"strconv"
 
 	"nauchka/files"
 	pb "nauchka/gRPC"
-	"nauchka/graph"
 
 	"google.golang.org/grpc"
 )
@@ -17,7 +18,7 @@ type server struct {
 }
 
 func (s *server) WriteDataToAnotherNode(ctx context.Context, in *pb.NodeRequest) (*pb.NodeResponse, error) {
-	var node graph.Node
+	var node Node
 
 	node.Data = in.GetData()
 	node.HashSelfParent = in.GetHashSelfParent()
@@ -30,10 +31,13 @@ func (s *server) WriteDataToAnotherNode(ctx context.Context, in *pb.NodeRequest)
 	return &pb.NodeResponse{Message: "Node recieved"}, nil
 }
 
-func serverStart() {
-	lis, err := net.Listen("tcp", ":50051")
+func ServerStart() {
+	port := strconv.Itoa(hosts[selfNumber].Port)
+	fmt.Println("Server Start at " + port)
+
+	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		log.Fatalf("failed to listen on port 50051: %v", err)
+		log.Fatalf("failed to listen on port %s: %v", port, err)
 	}
 
 	s := grpc.NewServer()

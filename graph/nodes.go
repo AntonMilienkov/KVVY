@@ -3,10 +3,9 @@ package graph
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"math/rand"
+
 	"nauchka/files"
-	"net/rpc"
 	"os"
 	"strconv"
 	"time"
@@ -57,53 +56,70 @@ func NodeGenerate(prevNode *Node, hashOtherParent string) *Node {
 	return &newNode
 }
 
-func clientRole() {
-	// to where?
-	client, err := rpc.Dial("tcp", "")
-
-	if err != nil {
-		log.Fatal("Не удалось подключиться к серверу:", err)
-	}
-	defer client.Close()
-}
-
 type Host struct {
 	DnsName string
 	Port    int
 }
 
-// TODO (пере-)доделать заполнение
+var hosts []Host
+
+var count, selfNumber int
+
 func fillHosts(hosts []Host) {
 	for i := range hosts {
 		hosts[i] = Host{
 			DnsName: "node" + strconv.Itoa(i+1),
-			Port:    17152 + i,
+			Port:    17152,
 		}
 	}
 }
 
-// TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
-func getSelfNumber() int {
-	return 0
+type Set[T comparable] map[T]struct{}
+
+func (s Set[T]) Has(item T) bool {
+	_, exists := s[item]
+	return exists
 }
 
-func sendNode(node *Node) error {
-	// ВЫБОР КОМУ ОТПРАВИТЬ
+func (s Set[T]) Add(items ...T) {
+	for _, item := range items {
+		s[item] = struct{}{}
+	}
+}
 
+func getRandomNodeNumber(exceptNodes Set[int]) (randomNodeNumber int) {
+	randomNodeNumber = selfNumber
+
+	for exceptNodes.Has(randomNodeNumber) {
+		randomNodeNumber = rand.Intn(count)
+	}
+
+	exceptNodes.Add(randomNodeNumber)
+
+	return
+}
+
+func Init() {
 	// количество узлов
-	const n = 4
-	hosts := make([]Host, n)
+	count, _ = strconv.Atoi(os.Getenv("COUNT"))
+
+	hosts = make([]Host, count)
 
 	// заполнить массив
 	fillHosts(hosts)
 
-	// selfNumber := getSelfNumber()
+	selfNumber, _ = strconv.Atoi(os.Getenv("SELFNUMBER"))
+}
 
-	// УСТАНОВКА СОЕДИНЕНИЯ (ЗАПУСК КЛИЕНТА)
+func sendNode(node *Node) error {
 
-	// ОТПРАВКА ДАННЫХ (ВЫЗОВ УДАЛЕННОГО МЕТОДА)
+	exceptNodes := make(Set[int])
 
-	// ОБОРВАЛИ СОЕДИНЕНИЕ
+	exceptNodes.Add(selfNumber)
+
+	randomNodeNumber := getRandomNodeNumber(exceptNodes)
+
+	client(hosts[randomNodeNumber], node)
 
 	// TODO: повторить
 
@@ -136,22 +152,21 @@ func ArtifNodeGenerate(genesisNode *Node) error {
 	firstNode := NodeGenerate(genesisNode, "")
 
 	syncWriteToFiles(firstNode)
+	/*
+		coef := 1
+		end := time.Now().Add(time.Duration(coef) * time.Minute)
 
-	rand.Seed(time.Now().UnixNano())
-	coef := 1
-	end := time.Now().Add(time.Duration(coef) * time.Minute)
+		nextNode := firstNode
+		for time.Now().Before(end) {
+			secToSleep := coef*5 + rand.Intn(20)
+			time.Sleep(time.Duration(secToSleep) * time.Second)
 
-	nextNode := firstNode
-	for time.Now().Before(end) {
-		secToSleep := coef*5 + rand.Intn(20)
-		time.Sleep(time.Duration(secToSleep) * time.Second)
+			otherParentNode := getOtherParentNode()
+			nextNode = NodeGenerate(nextNode, otherParentNode.HashOwn)
 
-		otherParentNode := getOtherParentNode()
-		nextNode = NodeGenerate(nextNode, otherParentNode.HashOwn)
-
-		files.WriteToFile(&nextNode)
-	}
-
+			files.WriteToFile(&nextNode)
+		}
+	*/
 	return nil
 }
 
